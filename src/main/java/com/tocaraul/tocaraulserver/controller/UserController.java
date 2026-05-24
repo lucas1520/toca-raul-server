@@ -20,7 +20,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public User setUser(@RequestBody User user) {
+    public User registerUser(@RequestBody User user) {
         this.userService.save(user);
         return user;
     }
