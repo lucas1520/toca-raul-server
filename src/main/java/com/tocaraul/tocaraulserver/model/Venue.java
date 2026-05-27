@@ -9,20 +9,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "users")
-public class User implements UserDetails {
+@Table(name = "venues")
+public class Venue {
     @Getter
     @Setter
     @Id
@@ -33,12 +29,12 @@ public class User implements UserDetails {
     @Getter
     @Setter
     @Column(nullable = false)
-    private String firstName;
+    private String name;
 
     @Getter
     @Setter
-    @Column(nullable = true)
-    private String lastName;
+    @Column(nullable = false)
+    private LocalDateTime date;
 
     @Getter
     @Setter
@@ -49,30 +45,20 @@ public class User implements UserDetails {
     @Getter
     @Setter
     @Column(nullable = false)
-    private String email;
+    private String local;
 
     @Getter
     @Setter
     @Column(nullable = false)
-    private String type;
+    private String city;
 
     @Setter
     @Getter
     @Column(nullable = false)
-    private String passHash;
+    private String genre;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
-
-    @Override
-    public @Nullable String getPassword() {
-        return this.passHash;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
+    @Setter
+    @Getter
+    @Column(nullable = false)
+    private String photosUrl;
 }
