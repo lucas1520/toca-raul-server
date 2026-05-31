@@ -1,4 +1,4 @@
-package com.tocaraul.tocaraulserver.model;
+package com.tocaraul.tocaraulserver.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,6 +1,6 @@
 package com.tocaraul.tocaraulserver.controller;
 
-import com.tocaraul.tocaraulserver.model.Artist;
+import com.tocaraul.tocaraulserver.entity.Artist;
 import com.tocaraul.tocaraulserver.service.ArtistService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

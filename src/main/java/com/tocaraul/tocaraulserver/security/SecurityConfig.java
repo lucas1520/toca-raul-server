@@ -1,4 +1,4 @@
-package com.tocaraul.tocaraulserver;
+package com.tocaraul.tocaraulserver.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +32,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-//                        .requestMatchers("/artist/**").permitAll()
+                        .requestMatchers("/artist/**").permitAll()
+                        .requestMatchers("/event/**").permitAll()
                         .anyRequest().authenticated()
                 )
 

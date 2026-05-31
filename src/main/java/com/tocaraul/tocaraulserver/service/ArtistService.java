@@ -1,6 +1,6 @@
 package com.tocaraul.tocaraulserver.service;
 
-import com.tocaraul.tocaraulserver.model.Artist;
+import com.tocaraul.tocaraulserver.entity.Artist;
 import com.tocaraul.tocaraulserver.repository.ArtistRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

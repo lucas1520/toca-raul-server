@@ -1,11 +1,15 @@
-package com.tocaraul.tocaraulserver.model;
+package com.tocaraul.tocaraulserver.entity;
 
+import com.tocaraul.tocaraulserver.dto.RegisterEventDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,8 +21,21 @@ import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "venues")
-public class Venue {
+@Table(name = "events")
+public class Event {
+
+    public static Event from(RegisterEventDto registerEventDto, Venue venue) {
+        Event event = new Event();
+
+        event.setVenue(venue);
+        event.setGenre(registerEventDto.genre());
+        event.setDate(registerEventDto.date());
+        event.setLocal(registerEventDto.local());
+        event.setDescription(registerEventDto.description());
+
+        return event;
+    }
+
     @Getter
     @Setter
     @Id
@@ -28,8 +45,14 @@ public class Venue {
 
     @Getter
     @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "venue_id", nullable = false)
+    private Venue venue;
+
+    @Getter
+    @Setter
     @Column(nullable = false)
-    private String name;
+    private String genre;
 
     @Getter
     @Setter
@@ -49,16 +72,7 @@ public class Venue {
 
     @Getter
     @Setter
-    @Column(nullable = false)
-    private String city;
+    @Column(nullable = true)
+    private String description;
 
-    @Setter
-    @Getter
-    @Column(nullable = false)
-    private String genre;
-
-    @Setter
-    @Getter
-    @Column(nullable = false)
-    private String photosUrl;
 }

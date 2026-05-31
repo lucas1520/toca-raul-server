@@ -1,6 +1,6 @@
 package com.tocaraul.tocaraulserver.service;
 
-import com.tocaraul.tocaraulserver.model.User;
+import com.tocaraul.tocaraulserver.entity.User;
 import com.tocaraul.tocaraulserver.repository.UserRepository;
 import org.springframework.stereotype.Service;
 

@@ -2,7 +2,7 @@ package com.tocaraul.tocaraulserver.controller;
 
 import com.tocaraul.tocaraulserver.dto.LoginDto;
 import com.tocaraul.tocaraulserver.dto.RegisterDto;
-import com.tocaraul.tocaraulserver.model.User;
+import com.tocaraul.tocaraulserver.entity.User;
 import com.tocaraul.tocaraulserver.service.TokenService;
 import com.tocaraul.tocaraulserver.service.UserService;
 import org.springframework.http.ResponseEntity;

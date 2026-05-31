@@ -1,4 +1,4 @@
-package com.tocaraul.tocaraulserver;
+package com.tocaraul.tocaraulserver.security;
 
 import com.tocaraul.tocaraulserver.repository.UserRepository;
 import com.tocaraul.tocaraulserver.service.TokenService;

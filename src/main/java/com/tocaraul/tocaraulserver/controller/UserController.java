@@ -1,6 +1,6 @@
 package com.tocaraul.tocaraulserver.controller;
 
-import com.tocaraul.tocaraulserver.model.User;
+import com.tocaraul.tocaraulserver.entity.User;
 import com.tocaraul.tocaraulserver.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
