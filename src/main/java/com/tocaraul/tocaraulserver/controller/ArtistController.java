@@ -1,7 +1,10 @@
 package com.tocaraul.tocaraulserver.controller;
 
+import com.tocaraul.tocaraulserver.dto.RegisterArtistDto;
 import com.tocaraul.tocaraulserver.entity.Artist;
+import com.tocaraul.tocaraulserver.entity.User;
 import com.tocaraul.tocaraulserver.service.ArtistService;
+import com.tocaraul.tocaraulserver.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,11 +23,13 @@ import java.util.List;
 @RequestMapping("/artist")
 public class ArtistController {
     private final ArtistService artistService;
+    private final UserService userService;
 
     public static final int MAX_ARTISTS_TO_LIST = 50;
 
-    ArtistController(ArtistService artistService) {
+    ArtistController(ArtistService artistService, UserService userService) {
         this.artistService = artistService;
+        this.userService = userService;
     }
 
     @GetMapping("/get")
@@ -37,10 +42,18 @@ public class ArtistController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Artist> registerArtist(@RequestBody Artist artist) {
-        if (artist  == null) {
+    public ResponseEntity<Artist> registerArtist(@RequestBody RegisterArtistDto registerArtistDto) {
+        if (registerArtistDto  == null) {
             return ResponseEntity.badRequest().build();
         }
+
+        User foundUser = this.userService.findById(registerArtistDto.userId());
+
+        if (foundUser == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Artist artist = Artist.from(registerArtistDto, foundUser);
 
         Artist registeredArtist = this.artistService.save(artist);
 

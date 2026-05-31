@@ -16,7 +16,7 @@ public class UserController {
 
     @GetMapping(value = "/{userId}")
     public User getUser(@PathVariable int userId) {
-        return this.userService.getById(userId);
+        return this.userService.findById(userId);
     }
 
     @PostMapping(value = "/register")
