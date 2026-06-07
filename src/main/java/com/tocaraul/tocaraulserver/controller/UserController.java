@@ -1,7 +1,10 @@
 package com.tocaraul.tocaraulserver.controller;
 
+import com.tocaraul.tocaraulserver.dto.MeResponseDto;
 import com.tocaraul.tocaraulserver.entity.User;
+import com.tocaraul.tocaraulserver.service.ProfileService;
 import com.tocaraul.tocaraulserver.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -10,13 +13,24 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final ProfileService profileService;
+
+    public UserController(UserService userService, ProfileService profileService) {
         this.userService = userService;
+        this.profileService = profileService;
     }
 
     @GetMapping(value = "/{userId}")
     public User getUser(@PathVariable int userId) {
         return this.userService.findById(userId);
+    }
+
+    @GetMapping("/me")
+    public MeResponseDto me(Authentication authentication) {
+
+        User user = (User) authentication.getPrincipal();
+
+        return profileService.buildMeResponse(user);
     }
 
     @PostMapping(value = "/register")

@@ -16,6 +16,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
@@ -73,6 +74,21 @@ public class Event {
     @Getter
     @Setter
     @Column(nullable = true)
+    private String imagesUrl;
+
+    @Getter
+    @Setter
+    @Column(nullable = true)
     private String description;
+
+    @Getter
+    @Setter
+    @Column(scale = 2)
+    private BigDecimal offeredPrice;
+
+    @Getter
+    @Setter
+    @Column(nullable = true)
+    private int maxPeople;
 
 }

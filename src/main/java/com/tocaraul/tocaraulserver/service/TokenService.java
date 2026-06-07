@@ -26,7 +26,7 @@ public class TokenService {
                     .withIssuer("tocaraul-api")
                     .withSubject(user.getEmail())
                     .withClaim("id", user.getId())
-                    .withClaim("type", user.getType())
+                    .withClaim("type", user.getType().ordinal())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {

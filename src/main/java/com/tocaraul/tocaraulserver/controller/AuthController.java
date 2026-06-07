@@ -3,6 +3,7 @@ package com.tocaraul.tocaraulserver.controller;
 import com.tocaraul.tocaraulserver.dto.LoginDto;
 import com.tocaraul.tocaraulserver.dto.RegisterDto;
 import com.tocaraul.tocaraulserver.entity.User;
+import com.tocaraul.tocaraulserver.enums.UserTypeEnum;
 import com.tocaraul.tocaraulserver.service.TokenService;
 import com.tocaraul.tocaraulserver.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +71,7 @@ public class AuthController {
         newUser.setLastName(registerDto.lastName());
         newUser.setEmail(registerDto.email());
         newUser.setPassHash(encryptedPassword);
-        newUser.setType(registerDto.type().toUpperCase());
+        newUser.setType(UserTypeEnum.valueOf(registerDto.type().toUpperCase()));
 
         this.userService.save(newUser);
 

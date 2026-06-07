@@ -1,8 +1,11 @@
 package com.tocaraul.tocaraulserver.entity;
 
+import com.tocaraul.tocaraulserver.enums.UserTypeEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -48,13 +51,14 @@ public class User implements UserDetails {
 
     @Getter
     @Setter
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Getter
     @Setter
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String type;
+    private UserTypeEnum type;
 
     @Setter
     @Getter
