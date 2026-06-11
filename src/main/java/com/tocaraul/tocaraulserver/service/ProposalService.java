@@ -1,6 +1,7 @@
 package com.tocaraul.tocaraulserver.service;
 
 import com.tocaraul.tocaraulserver.dto.NewProposalDto;
+import com.tocaraul.tocaraulserver.dto.ProposalScheduleItemDto;
 import com.tocaraul.tocaraulserver.entity.Artist;
 import com.tocaraul.tocaraulserver.entity.Event;
 import com.tocaraul.tocaraulserver.entity.Proposal;
@@ -16,6 +17,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.List;
 
 @Service
 public class ProposalService {
@@ -66,5 +71,43 @@ public class ProposalService {
         proposal.setInitiatedBy(ProposalInitiator.VENUE);
 
         return proposalRepository.save(proposal);
+    }
+
+    public List<ProposalScheduleItemDto> getVenueSchedule(User user, YearMonth month) {
+        if (!UserTypeEnum.VENUE.equals(user.getType())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas contratantes podem consultar a agenda");
+        }
+
+        Venue venue = venueRepository.findByUser(user)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Perfil de contratante nao encontrado"));
+
+        LocalDateTime start = month.atDay(1).atStartOfDay();
+        LocalDateTime end = month.plusMonths(1).atDay(1).atStartOfDay();
+
+        return proposalRepository.findScheduleByVenueAndDateRange(venue, start, end)
+            .stream()
+            .map(this::toScheduleItem)
+            .toList();
+    }
+
+    private ProposalScheduleItemDto toScheduleItem(Proposal proposal) {
+        Artist artist = proposal.getArtist();
+        Event event = proposal.getEvent();
+
+        return new ProposalScheduleItemDto(
+            proposal.getId(),
+            artist.getId(),
+            artist.getName(),
+            artist.getPhotoUrl(),
+            artist.getGenres(),
+            event.getId(),
+            event.getDate(),
+            event.getLocal(),
+            event.getGenre(),
+            event.getDescription(),
+            proposal.getOfferedPrice(),
+            proposal.getStatus(),
+            proposal.getPaymentStatus()
+        );
     }
 }
