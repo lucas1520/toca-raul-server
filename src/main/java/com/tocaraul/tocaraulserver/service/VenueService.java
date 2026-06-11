@@ -17,4 +17,8 @@ public class VenueService {
         return this.venueRepository.findById(id);
     }
 
+    public Venue save(Venue venue) {
+        return this.venueRepository.save(venue);
+    }
+
 }

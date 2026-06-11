@@ -3,9 +3,11 @@ package com.tocaraul.tocaraulserver.controller;
 import com.tocaraul.tocaraulserver.dto.LoginDto;
 import com.tocaraul.tocaraulserver.dto.RegisterDto;
 import com.tocaraul.tocaraulserver.entity.User;
+import com.tocaraul.tocaraulserver.entity.Venue;
 import com.tocaraul.tocaraulserver.enums.UserTypeEnum;
 import com.tocaraul.tocaraulserver.service.TokenService;
 import com.tocaraul.tocaraulserver.service.UserService;
+import com.tocaraul.tocaraulserver.service.VenueService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,10 +34,13 @@ public class AuthController {
 
     private final TokenService tokenService;
 
-    AuthController(UserService userService, PasswordEncoder passwordEncoder, TokenService tokenService) {
+    private final VenueService venueService;
+
+    AuthController(UserService userService, PasswordEncoder passwordEncoder, TokenService tokenService, VenueService venueService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
+        this.venueService = venueService;
     }
 
     @PostMapping("/login")
@@ -64,6 +69,12 @@ public class AuthController {
             return ResponseEntity.badRequest().body(EMAIL_ALREADY_IN_USE);
         }
 
+        UserTypeEnum userType = UserTypeEnum.valueOf(registerDto.type().toUpperCase());
+
+        if (UserTypeEnum.VENUE.equals(userType) && hasMissingVenueInfo(registerDto)) {
+            return ResponseEntity.badRequest().body("Dados do contratante obrigatorios");
+        }
+
         String encryptedPassword = this.passwordEncoder.encode(registerDto.password());
 
         User newUser = new User();
@@ -71,10 +82,34 @@ public class AuthController {
         newUser.setLastName(registerDto.lastName());
         newUser.setEmail(registerDto.email());
         newUser.setPassHash(encryptedPassword);
-        newUser.setType(UserTypeEnum.valueOf(registerDto.type().toUpperCase()));
+        newUser.setType(userType);
+
+        if (UserTypeEnum.VENUE.equals(userType)) {
+            Venue venue = new Venue();
+            venue.setName(registerDto.venueName());
+            venue.setLocal(registerDto.venueLocal());
+            venue.setCity(registerDto.venueCity());
+            venue.setPhotosUrl(registerDto.venuePhotosUrl());
+            venue.setUser(newUser);
+
+            this.venueService.save(venue);
+
+            return ResponseEntity.ok(REGISTER_SUCCESSFUL);
+        }
 
         this.userService.save(newUser);
 
         return ResponseEntity.ok(REGISTER_SUCCESSFUL);
+    }
+
+    private boolean hasMissingVenueInfo(RegisterDto registerDto) {
+        return isBlank(registerDto.venueName())
+            || isBlank(registerDto.venueLocal())
+            || isBlank(registerDto.venueCity())
+            || isBlank(registerDto.venuePhotosUrl());
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.isBlank();
     }
 }

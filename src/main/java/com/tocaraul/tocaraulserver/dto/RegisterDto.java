@@ -5,5 +5,9 @@ public record RegisterDto (
     String lastName,
     String email,
     String password,
-    String type
+    String type,
+    String venueName,
+    String venueLocal,
+    String venueCity,
+    String venuePhotosUrl
 ) {}
