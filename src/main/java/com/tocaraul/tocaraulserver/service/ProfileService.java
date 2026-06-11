@@ -22,26 +22,22 @@ public class ProfileService {
         Artist artist = null;
         Venue venue = null;
 
-        if (UserTypeEnum.ARTIST.name().equals(user.getType())) {
-            artist = artistRepository
-                    .findByUser(user)
-                    .orElse(null);
+        if (UserTypeEnum.ARTIST.equals(user.getType())) {
+            artist = artistRepository.findByUser(user).orElse(null);
         }
 
-        if (UserTypeEnum.VENUE.name().equals(user.getType())) {
-            venue = venueRepository
-                    .findByUser(user)
-                    .orElse(null);
+        if (UserTypeEnum.VENUE.equals(user.getType())) {
+            venue = venueRepository.findByUser(user).orElse(null);
         }
 
         return new MeResponseDto(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getType(),
-                artist,
-                venue
+            user.getId(),
+            user.getFirstName(),
+            user.getLastName(),
+            user.getEmail(),
+            user.getType(),
+            artist,
+            venue
         );
     }
 }

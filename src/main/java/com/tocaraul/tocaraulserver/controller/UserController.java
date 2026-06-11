@@ -4,8 +4,10 @@ import com.tocaraul.tocaraulserver.dto.MeResponseDto;
 import com.tocaraul.tocaraulserver.entity.User;
 import com.tocaraul.tocaraulserver.service.ProfileService;
 import com.tocaraul.tocaraulserver.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/user")
@@ -29,6 +31,10 @@ public class UserController {
     public MeResponseDto me(Authentication authentication) {
 
         User user = (User) authentication.getPrincipal();
+
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Nao autenticado");
+        }
 
         return profileService.buildMeResponse(user);
     }
